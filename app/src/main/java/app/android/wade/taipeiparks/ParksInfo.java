@@ -29,6 +29,9 @@ public class ParksInfo {
 
     public static ArrayList<ParksInfo> fromJsonString(String json) {
         ArrayList<ParksInfo> detailData = null;
+
+        if (json == null) return null;
+
         try {
             JSONObject rootJObj = new JSONObject(json);
             JSONObject usefulJObj = rootJObj.getJSONObject("result");

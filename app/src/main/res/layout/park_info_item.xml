@@ -10,24 +10,50 @@
     android:layout_margin="5dp"
     card_view:cardCornerRadius="5dp">
 
-    <TextView
-        android:id="@+id/info_text"
+    <RelativeLayout
+        android:id="@+id/header_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/app_name"/>
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/expandable_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        <ImageView
+            android:id="@+id/view_spot_thumb"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:src="@android:color/holo_orange_light"/>
 
         <TextView
+            android:id="@+id/park_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"/>
+            android:layout_toEndOf="@id/view_spot_thumb"
+            android:text="@string/appbar_scrolling_view_behavior"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/view_spot_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/park_name"
+            android:layout_toEndOf="@id/view_spot_thumb"
+            android:text="1234568789"/>
+
+        <LinearLayout
+            android:id="@+id/expandable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view_spot_name"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/view_spot_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </android.support.v7.widget.CardView>

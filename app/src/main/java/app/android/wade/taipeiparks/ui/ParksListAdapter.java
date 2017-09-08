@@ -56,7 +56,7 @@ public class ParksListAdapter extends RecyclerView.Adapter {
 
         ViewHolder(View v) {
             super(v);
-            mTextView = v.findViewById(R.id.info_text);
+            mTextView = v.findViewById(R.id.park_name);
             mExpandableLayout = v.findViewById(R.id.expandable_layout);
         }
     }
