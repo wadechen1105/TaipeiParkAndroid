@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import app.android.wade.taipeiparks.ParksInfo;
 import app.android.wade.taipeiparks.R;
 
 public class ParksListAdapter extends RecyclerView.Adapter {
@@ -21,9 +22,9 @@ public class ParksListAdapter extends RecyclerView.Adapter {
             view.setTag(!isShow);
         }
     };
-    private List<String> mData;
+    private ArrayList<ParksInfo> mData;
 
-    public ParksListAdapter(List<String> data) {
+    public void setItems(ArrayList<ParksInfo> data) {
         mData = data;
     }
 
@@ -40,12 +41,13 @@ public class ParksListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder vh = (ViewHolder) holder;
-        vh.mTextView.setText(mData.get(position));
+        ParksInfo info = mData.get(position);
+        vh.mTextView.setText(info.getParkName());
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return (mData == null) ? 0 : mData.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
