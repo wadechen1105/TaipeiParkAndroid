@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/view_spot_thumb"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/thumbnail_size"
+            android:layout_height="@dimen/thumbnail_size"
             android:layout_alignParentStart="true"
             android:src="@android:color/holo_orange_light"/>
 
@@ -26,16 +26,14 @@
             android:id="@+id/park_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/view_spot_thumb"
-            android:text="@string/appbar_scrolling_view_behavior"/>
+            android:layout_toEndOf="@id/view_spot_thumb"/>
 
         <TextView
             android:id="@+id/view_spot_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/park_name"
-            android:layout_toEndOf="@id/view_spot_thumb"
-            android:text="1234568789"/>
+            android:layout_toEndOf="@id/view_spot_thumb"/>
 
         <LinearLayout
             android:id="@+id/expandable_layout"
@@ -50,7 +48,7 @@
                 android:id="@+id/view_spot_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"/>
+                android:layout_margin="15dp"/>
 
         </LinearLayout>
 

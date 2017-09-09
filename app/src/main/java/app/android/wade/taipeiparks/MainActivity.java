@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mParksRecycleView = (RecyclerView) findViewById(R.id.parks_list_view);
-        mAdapter = new ParksListAdapter();
+        mAdapter = new ParksListAdapter(this);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mParksRecycleView.setLayoutManager(layoutManager);
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
+            String errMsg = "";
 
             try {
                 URL url = new URL(params[0]);
@@ -84,8 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                errMsg = e.getMessage();
+                Log.e("ERR1", e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
+                errMsg = e.getMessage();
+                Log.e("ERR2", e.getMessage());
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -96,6 +102,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    errMsg = e.getMessage();
+                    Log.e("ERR3", e.getMessage());
+                }
+
+                final String passErrMsg = errMsg;
+
+                if (!passErrMsg.isEmpty()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, passErrMsg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
             return null;
@@ -114,4 +133,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.resumeLoadImage();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAdapter.stopLoadImage();
+    }
 }
