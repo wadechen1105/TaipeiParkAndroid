@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             mAdapter.setItems(ParksInfo.fromJsonString(result));
-            mAdapter.notifyDataSetChanged();
+            mAdapter.loadDataAndDisplayView();
 
             if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();

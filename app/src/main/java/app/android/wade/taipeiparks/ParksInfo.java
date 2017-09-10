@@ -1,8 +1,10 @@
 package app.android.wade.taipeiparks;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,16 +18,24 @@ public class ParksInfo {
 
     @SerializedName("_id")
     private String _id;
+
     @SerializedName("ParkName")
     private String parkName;
+
     @SerializedName("Name")
     private String viewSpot;
+
     @SerializedName("YearBuilt")
     private String yearBuilt;
+
     @SerializedName("Image")
     private String imageUrl;
+
     @SerializedName("Introduction")
     private String introduction;
+
+    @Expose(serialize = false)
+    private Bitmap thumbnail;
 
     public static ArrayList<ParksInfo> fromJsonString(String json) {
         ArrayList<ParksInfo> detailData = null;
@@ -77,5 +87,9 @@ public class ParksInfo {
     public String getIntroduction() {
         return introduction;
     }
+
+    public Bitmap getThumbnail() { return thumbnail; }
+
+    public void setThumbnail(Bitmap thumbnail) { this.thumbnail = thumbnail; }
 
 }
