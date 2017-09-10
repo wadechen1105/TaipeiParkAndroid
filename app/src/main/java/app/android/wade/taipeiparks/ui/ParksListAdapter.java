@@ -3,6 +3,7 @@ package app.android.wade.taipeiparks.ui;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.MemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -83,46 +82,9 @@ public class ParksListAdapter extends RecyclerView.Adapter {
         ImageLoader.getInstance().init(config.build());
     }
 
-    private void loadImage(final ParksInfo info) {
+    private Bitmap loadImage(final String url) {
         final ImageLoader loader = ImageLoader.getInstance();
-
-        loader.loadImage(info.getImageUrl(), new ImageSize(60, 60), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String uri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String uri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String uri, View view, Bitmap bitmap) {
-                mCurrentDataChangedCount += 1;
-                info.setThumbnail(bitmap);
-                if(mCurrentDataChangedCount > NOTIFY_DATACHANGED_THRESHOLD * mLoopCount) {
-                    ParksListAdapter.this.notifyDataSetChanged();
-                    mLoopCount += 1;
-                } else if (mCurrentDataChangedCount >= mData.size()) {
-                    ParksListAdapter.this.notifyDataSetChanged();
-                    mCurrentDataChangedCount = 0;
-                    mLoopCount = 1;
-                }
-
-                Log.d("LoadImage",
-                        "onLoadingComplete : " +
-                                "currentCount :" + mCurrentDataChangedCount +
-                                ", LoopCount = " + mLoopCount +
-                                ", total size = " + mData.size());
-            }
-
-            @Override
-            public void onLoadingCancelled(String uri, View view) {
-
-            }
-        });
-
+        return loader.loadImageSync(url, new ImageSize(60,60));
     }
 
     public void stopLoadImage() {
@@ -152,10 +114,8 @@ public class ParksListAdapter extends RecyclerView.Adapter {
         vh.mParkName.setText(info.getParkName());
         vh.mSpotName.setText(info.getViewSpot());
         vh.mDiscription.setText(info.getIntroduction());
-
-        if(info.getThumbnail() != null) {
-            vh.mThumbnail.setImageBitmap(info.getThumbnail());
-        }
+        vh.mThumbnailURL = info.getImageUrl();
+        new DownloadAsyncTask().execute(vh);
 
     }
 
@@ -164,26 +124,37 @@ public class ParksListAdapter extends RecyclerView.Adapter {
         return (mData == null) ? 0 : mData.size();
     }
 
-    public void loadDataAndDisplayView() {
-        notifyDataSetChanged();
-        for (ParksInfo info : mData) {
-            loadImage(info);
-        }
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView mParkName, mDiscription, mSpotName;
-        ImageView mThumbnail;
+        ImageView mThumbnailView;
         LinearLayout mExpandableLayout;
+        String mThumbnailURL;
+        Bitmap mThumbnail;
 
         ViewHolder(View v) {
             super(v);
             mParkName = v.findViewById(R.id.park_name);
             mExpandableLayout = v.findViewById(R.id.expandable_layout);
-            mThumbnail = v.findViewById(R.id.view_spot_thumb);
+            mThumbnailView = v.findViewById(R.id.view_spot_thumb);
             mSpotName = v.findViewById(R.id.view_spot_name);
             mDiscription = v.findViewById(R.id.view_spot_description);
         }
 
+    }
+
+    private class DownloadAsyncTask extends AsyncTask<ViewHolder, Void, ViewHolder> {
+
+        @Override
+        protected ViewHolder doInBackground(ViewHolder... params) {
+            //load image directly
+            ViewHolder viewHolder = params[0];
+            viewHolder.mThumbnail = loadImage(viewHolder.mThumbnailURL);
+            return viewHolder;
+        }
+
+        @Override
+        protected void onPostExecute(ViewHolder result) {
+            result.mThumbnailView.setImageBitmap(result.mThumbnail);
+        }
     }
 }

@@ -58,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPreExecute() {
             super.onPreExecute();
-
             mProgressDialog = new ProgressDialog(MainActivity.this);
-            mProgressDialog.setMessage("Please wait");
+            mProgressDialog.setMessage("Please wait ...");
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
         }
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             mAdapter.setItems(ParksInfo.fromJsonString(result));
-            mAdapter.loadDataAndDisplayView();
+            mAdapter.notifyDataSetChanged();
 
             if (mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();

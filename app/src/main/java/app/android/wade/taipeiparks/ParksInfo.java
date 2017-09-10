@@ -34,9 +34,6 @@ public class ParksInfo {
     @SerializedName("Introduction")
     private String introduction;
 
-    @Expose(serialize = false)
-    private Bitmap thumbnail;
-
     public static ArrayList<ParksInfo> fromJsonString(String json) {
         ArrayList<ParksInfo> detailData = null;
 
@@ -46,17 +43,11 @@ public class ParksInfo {
             JSONObject rootJObj = new JSONObject(json);
             JSONObject usefulJObj = rootJObj.getJSONObject("result");
 
-            Log.d("json result : ->", "count = " + usefulJObj.toString());
-
             String jsonArr = usefulJObj.getJSONArray("results").toString();
             Type listType = new TypeToken<ArrayList<ParksInfo>>() {
             }.getType();
             Gson gson = new Gson();
             detailData = gson.fromJson(jsonArr, listType);
-            StringBuffer sb = new StringBuffer();
-            for (ParksInfo obj : detailData) {
-                Log.d("Response: ", "> name" + obj.getParkName());
-            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -88,8 +79,5 @@ public class ParksInfo {
         return introduction;
     }
 
-    public Bitmap getThumbnail() { return thumbnail; }
-
-    public void setThumbnail(Bitmap thumbnail) { this.thumbnail = thumbnail; }
 
 }
