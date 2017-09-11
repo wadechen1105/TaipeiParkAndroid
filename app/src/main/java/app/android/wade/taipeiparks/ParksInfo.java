@@ -1,10 +1,6 @@
 package app.android.wade.taipeiparks;
 
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,6 +10,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+/**
+ * DTO for park info
+ */
 public class ParksInfo {
 
     @SerializedName("_id")
@@ -33,6 +32,7 @@ public class ParksInfo {
 
     @SerializedName("Introduction")
     private String introduction;
+
 
     public static ArrayList<ParksInfo> fromJsonString(String json) {
         ArrayList<ParksInfo> detailData = null;
@@ -78,6 +78,5 @@ public class ParksInfo {
     public String getIntroduction() {
         return introduction;
     }
-
 
 }
